@@ -8,14 +8,31 @@
 
 import UIKit
 
+// NCMBフレームワークの読み込み
+import NCMB
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // NCMBとアプリと紐付ける
+        NCMB.setApplicationKey("bcdc2cb33634dee3bf868646959a03c22af0fac98f3f7a4e2f8076e797490c4e", clientKey: "231c36d5d2f46aaca1cbe71f03e32dd54d88575ad900e5992c7907e1219915a4")
+        
+        // ログイン済かどうかUserDefaultsから読み込み
+        let ud = UserDefaults.standard
+        let isLogin = ud.bool(forKey: "isSignIn")
+        
+        if isLogin == false {
+            // ログイン済でなかった場合、ログイン用のStoryboardを初期画面として起動
+            let rootViewController: SignInViewController = UIStoryboard(name: "SignIn", bundle: Bundle.main).instantiateViewController(withIdentifier: "SignInViewController") as! SignInViewController
+            let navigation = UINavigationController(rootViewController: rootViewController)
+            self.window?.rootViewController = navigation
+        }
+        
         return true
     }
 
